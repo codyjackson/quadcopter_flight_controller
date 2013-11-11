@@ -1,22 +1,19 @@
 #include "pwm_parallel_reader.h"
+#include "pwm_parallel_writer.h"
 
 #include <Arduino.h>
 
-Pwm::InputPin pins[2] = {Pwm::InputPin(5),Pwm::InputPin(6)};
+Pwm::OutputPin opins[2] = {Pwm::OutputPin(6, 0), Pwm::OutputPin(5, 200)};
 
 void setup()
 {
-	Serial.begin(9600);
-	for(int i = 0; i < sizeof(pins)/sizeof(Pwm::InputPin); ++i)
-		pins[i].initialize();
+	for(char i = 0; i < sizeof(opins)/sizeof(Pwm::OutputPin); ++i)
+		opins[i].initialize();
 }
 
 void loop()
 {
-	Pwm::ParallelReader::update_pins<2>(pins);
-	Serial.println(pins[0].get_current_width());
-	Serial.println(pins[1].get_current_width());
-	Serial.println("end");
-	delay(500);
+  Pwm::ParallelWriter::send_pulse_to_pins<2>(opins);
+  delayMicroseconds(10);
 }
 
