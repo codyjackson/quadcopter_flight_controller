@@ -6,18 +6,18 @@ namespace Pwm
 	class InputPin
 	{
 	public:
-		InputPin(char pinNumber);
+		InputPin(unsigned char pinNumber);
 		void initialize();
 
-		short get_current_width() const;
-		char get_pin_number() const;
+		unsigned short get_current_width() const;
+		unsigned char get_pin_number() const;
 
 	private:
-		void update_width(short width);
+		void update_width(unsigned short width);
 
 		friend class ParallelReader;
-		char _pinNumber;
-		short _currentWidth;
+		unsigned char _pinNumber;
+		unsigned short _currentWidth;
 	};
 
 	//I'm making this parallel reader instead of using the pulsein function in order to avoid having 
@@ -30,7 +30,7 @@ namespace Pwm
 		//reading but couldn't think of one. There just doesn't seem to be a way of getting around 
 		//tight coupling between the PIN class and the update method if I want to be able to perform
 		//multiple PWM readings at the same time.
-		template<char NUM_PINS>
+		template<unsigned char NUM_PINS>
 		static void update_pins(InputPin pins[])
 		{
 			PinReader pinReaders[NUM_PINS];
@@ -38,14 +38,14 @@ namespace Pwm
 				pinReaders[i] = PinReader(pins[i]);
 
 
-			bool completed = true;
-			do
+			for(;;)
 			{
-				completed = true;
+				bool completed = true;
 				for(char i = 0; i < NUM_PINS; ++i)
 					completed = completed && pinReaders[i].look_for_width_update_tick();
+				if(completed) 
+					break;
 			}
-			while(!completed);
 
 			for(char i = 0; i < NUM_PINS; ++i)
 				pins[i].update_width(pinReaders[i].get_updated_width());
@@ -60,12 +60,12 @@ namespace Pwm
 			PinReader();
 			PinReader(const InputPin& pin);
 
-			short get_updated_width() const;
+			unsigned short get_updated_width() const;
 			//Returns false if the a new width has been recorded. It will only record a single update.
 			bool look_for_width_update_tick();
 
 		private:
-			char _pinNumber;
+			unsigned char _pinNumber;
 			bool _previousPinValue;
 			bool _currentPinValue;
 			unsigned long _startTime;

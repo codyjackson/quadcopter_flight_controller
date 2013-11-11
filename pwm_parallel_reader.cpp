@@ -3,7 +3,7 @@
 
 namespace Pwm
 {
-	InputPin::InputPin(char pinNumber)
+	InputPin::InputPin(unsigned char pinNumber)
 		:_pinNumber(pinNumber), _currentWidth(0)
 	{}
 
@@ -12,17 +12,17 @@ namespace Pwm
 		pinMode(_pinNumber, INPUT);
 	}
 
-	short InputPin::get_current_width() const
+	unsigned short InputPin::get_current_width() const
 	{
 		return _currentWidth;
 	}
 
-	char InputPin::get_pin_number() const
+	unsigned char InputPin::get_pin_number() const
 	{
 		return _pinNumber;
 	}
 
-	void InputPin::update_width(short width)
+	void InputPin::update_width(unsigned short width)
 	{
 		_currentWidth = width;
 	}
@@ -34,7 +34,7 @@ namespace Pwm
 		:_pinNumber(pin.get_pin_number()), _previousPinValue(digitalRead(_pinNumber)), _currentPinValue(_previousPinValue), _startTime(0), _endTime(0)
 	{}
 
-	short ParallelReader::PinReader::get_updated_width() const
+	unsigned short ParallelReader::PinReader::get_updated_width() const
 	{
 		return _endTime - _startTime;
 	}
