@@ -3,54 +3,37 @@
 
 namespace Pwm
 {
-	OutputPin::OutputPin(unsigned char pinNumber, unsigned short width)
-		:_pinNumber(pinNumber), _width(width)
-	{}
 
+	OutputPin::OutputPin(unsigned char pinNumber, const Microseconds& frameWidth)
+		:_pinNumber(pinNumber), _currentState(false), _frameWidth(frameWidth)
+	{}
 	void OutputPin::initialize()
 	{
 		pinMode(_pinNumber, OUTPUT);
+		digitalWrite(_pinNumber, _currentState);
 	}
 
-	void OutputPin::set_width(unsigned short width)
+	void OutputPin::set_pulse_width(Microseconds pulseWidth)
 	{
-		_width = width;
+		_pulseWidth = pulseWidth;
 	}
 
-	unsigned char OutputPin::get_pin_number() const
+	void OutputPin::tick()
 	{
-		return _pinNumber;
-	}
-
-	unsigned short OutputPin::get_width() const
-	{
-		return _width;
-	}
-
-
-	ParallelWriter::PinWriter::PinWriter()
-	{}
-
-	ParallelWriter::PinWriter::PinWriter(const OutputPin& pin)
-		:_pinNumber(pin.get_pin_number()), _width(pin.get_width()), _startTime(0), _targetEndTime(0)
-	{
-		digitalWrite(_pinNumber, LOW);
-	}
-
-	bool ParallelWriter::PinWriter::send_pulse()
-	{
-		if(_startTime && (micros() >= _targetEndTime))
+		Microseconds currentTime(Time::Microseconds::time_since_start());
+		if( currentTime >= _nextToggle)
 		{
-			digitalWrite(_pinNumber, LOW);
-			return true;
+			_nextToggle = _currentState ? currentTime + (_frameWidth - _pulseWidth) : currentTime + _pulseWidth;
+			_currentState = !_currentState;
+			digitalWrite(_pinNumber, _currentState);
 		}
-
-		if(!_startTime)
-		{
-			_startTime = micros();
-			_targetEndTime = _startTime + 1000 + _width;
-			digitalWrite(_pinNumber, HIGH);
-		}
-		return false;
 	}
+
+	private:
+		unsigned char _pinNumber;
+		bool _currentState;
+		Microseconds _pulseWidth;
+		Microseconds _frameWidth;
+		Microseconds _nextToggle;
+	};
 }
