@@ -4,7 +4,7 @@
 namespace Pwm
 {
 
-	OutputPin::OutputPin(unsigned char pinNumber, const Microseconds& frameWidth)
+	OutputPin::OutputPin(unsigned char pinNumber, const Time::Microseconds& frameWidth)
 		:_pinNumber(pinNumber), _currentState(false), _frameWidth(frameWidth)
 	{}
 	void OutputPin::initialize()
@@ -13,14 +13,14 @@ namespace Pwm
 		digitalWrite(_pinNumber, _currentState);
 	}
 
-	void OutputPin::set_pulse_width(Microseconds pulseWidth)
+	void OutputPin::set_pulse_width(Time::Microseconds pulseWidth)
 	{
 		_pulseWidth = pulseWidth;
 	}
 
 	void OutputPin::tick()
 	{
-		Microseconds currentTime(Time::Microseconds::time_since_start());
+		Time::Microseconds currentTime(Time::Microseconds::since_start());
 		if( currentTime >= _nextToggle)
 		{
 			_nextToggle = _currentState ? currentTime + (_frameWidth - _pulseWidth) : currentTime + _pulseWidth;
@@ -28,12 +28,4 @@ namespace Pwm
 			digitalWrite(_pinNumber, _currentState);
 		}
 	}
-
-	private:
-		unsigned char _pinNumber;
-		bool _currentState;
-		Microseconds _pulseWidth;
-		Microseconds _frameWidth;
-		Microseconds _nextToggle;
-	};
 }
