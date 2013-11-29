@@ -41,26 +41,20 @@ namespace Time
 	bool operator<(const Microseconds& lhs, const Microseconds& rhs);
 	bool operator>(const Microseconds& lhs, const Microseconds& rhs);
 	bool operator==(const Microseconds& lhs, const Microseconds& rhs);
+	bool operator!=(const Microseconds& lhs, const Microseconds& rhs);
 	bool operator<=(const Microseconds& lhs, const Microseconds& rhs);
 	bool operator>=(const Microseconds& lhs, const Microseconds& rhs);
+	Microseconds operator+(const Microseconds& lhs, const Microseconds& rhs);
+	Microseconds operator-(const Microseconds& lhs, const Microseconds& rhs);
 
 	bool operator<(const Milliseconds& lhs, const Milliseconds& rhs);
 	bool operator>(const Milliseconds& lhs, const Milliseconds& rhs);
 	bool operator==(const Milliseconds& lhs, const Milliseconds& rhs);
+	bool operator!=(const Milliseconds& lhs, const Milliseconds& rhs);
 	bool operator<=(const Milliseconds& lhs, const Milliseconds& rhs);
 	bool operator>=(const Milliseconds& lhs, const Milliseconds& rhs);
-
-	bool operator<(const Milliseconds& lhs, const Microseconds& rhs);
-	bool operator>(const Milliseconds& lhs, const Microseconds& rhs);
-	bool operator==(const Milliseconds& lhs, const Microseconds& rhs);
-	bool operator<=(const Milliseconds& lhs, const Microseconds& rhs);
-	bool operator>=(const Milliseconds& lhs, const Microseconds& rhs);
-
-	bool operator<(const Microseconds& lhs, const Milliseconds& rhs);
-	bool operator>(const Microseconds& lhs, const Milliseconds& rhs);
-	bool operator==(const Microseconds& lhs, const Milliseconds& rhs);
-	bool operator<=(const Microseconds& lhs, const Milliseconds& rhs);
-	bool operator>=(const Microseconds& lhs, const Milliseconds& rhs);
+	Milliseconds operator+(const Milliseconds& lhs, const Milliseconds& rhs);
+	Milliseconds operator-(const Milliseconds& lhs, const Milliseconds& rhs);
 }
 
 #endif

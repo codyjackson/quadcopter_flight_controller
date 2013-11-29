@@ -70,6 +70,11 @@ namespace Time
 		return lhs.raw() == rhs.raw();
 	}
 
+	bool operator!=(const Microseconds& lhs, const Microseconds& rhs)
+	{
+		return lhs.raw() != rhs.raw();
+	}
+
 	bool operator<=(const Microseconds& lhs, const Microseconds& rhs)
 	{
 		return lhs.raw() <= rhs.raw();
@@ -78,6 +83,16 @@ namespace Time
 	bool operator>=(const Microseconds& lhs, const Microseconds& rhs)
 	{
 		return lhs.raw() >= rhs.raw();
+	}
+
+	Microseconds operator+(const Microseconds& lhs, const Microseconds& rhs)
+	{
+		return Microseconds(lhs.raw()+rhs.raw());
+	}
+
+	Microseconds operator-(const Microseconds& lhs, const Microseconds& rhs)
+	{
+		return Microseconds(lhs.raw()-rhs.raw());
 	}
 
 
@@ -96,6 +111,11 @@ namespace Time
 		return lhs.raw() == rhs.raw();
 	}
 
+	bool operator!=(const Milliseconds& lhs, const Milliseconds& rhs)
+	{
+		return lhs.raw() != rhs.raw();
+	}
+
 	bool operator<=(const Milliseconds& lhs, const Milliseconds& rhs)
 	{
 		return lhs.raw() <= rhs.raw();
@@ -105,57 +125,14 @@ namespace Time
 	{
 		return lhs.raw() >= rhs.raw();
 	}
-
-
-	bool operator<(const Milliseconds& lhs, const Microseconds& rhs)
+	
+	Milliseconds operator+(const Milliseconds& lhs, const Milliseconds& rhs)
 	{
-		return static_cast<Microseconds>(lhs) < rhs;
+		return Milliseconds(lhs.raw()+rhs.raw());
 	}
 
-	bool operator>(const Milliseconds& lhs, const Microseconds& rhs)
+	Milliseconds operator-(const Milliseconds& lhs, const Milliseconds& rhs)
 	{
-		return static_cast<Microseconds>(lhs) > rhs;
+		return Milliseconds(lhs.raw()-rhs.raw());
 	}
-
-	bool operator==(const Milliseconds& lhs, const Microseconds& rhs)
-	{
-		return static_cast<Microseconds>(lhs) == rhs;
-	}
-
-	bool operator<=(const Milliseconds& lhs, const Microseconds& rhs)
-	{
-		return static_cast<Microseconds>(lhs) <= rhs;
-	}
-
-	bool operator>=(const Milliseconds& lhs, const Microseconds& rhs)
-	{
-		return static_cast<Microseconds>(lhs) >= rhs;
-	}
-
-
-	bool operator<(const Microseconds& lhs, const Milliseconds& rhs)
-	{
-		return lhs < static_cast<Microseconds>(rhs);
-	}
-
-	bool operator>(const Microseconds& lhs, const Milliseconds& rhs)
-	{
-		return lhs > static_cast<Microseconds>(rhs);
-	}
-
-	bool operator==(const Microseconds& lhs, const Milliseconds& rhs)
-	{
-		return lhs == static_cast<Microseconds>(rhs);
-	}
-
-	bool operator<=(const Microseconds& lhs, const Milliseconds& rhs)
-	{
-		return lhs <= static_cast<Microseconds>(rhs);
-	}
-
-	bool operator>=(const Microseconds& lhs, const Milliseconds& rhs)
-	{
-		return lhs >= static_cast<Microseconds>(rhs);
-	}
-
 }
