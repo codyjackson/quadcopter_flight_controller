@@ -4,7 +4,7 @@
 namespace Pwm
 {
 	InputPin::InputPin(unsigned char pinNumber)
-		:_pinNumber(pinNumber), _currentWidth(0)
+		:_pinNumber(pinNumber), _pinToggledHighTimestamp(0), _currentWidth(0)
 	{}
 
 	void InputPin::initialize()
@@ -12,46 +12,21 @@ namespace Pwm
 		pinMode(_pinNumber, INPUT);
 	}
 
-	unsigned short InputPin::get_current_width() const
+	unsigned long InputPin::get_current_width() const
 	{
-		return _currentWidth;
+		return _currentWidth.raw();
 	}
 
-	unsigned char InputPin::get_pin_number() const
+	void InputPin::tick()
 	{
-		return _pinNumber;
-	}
-
-	void InputPin::update_width(unsigned short width)
-	{
-		_currentWidth = width;
-	}
-
-	ParallelReader::PinReader::PinReader()
-	{}
-
-	ParallelReader::PinReader::PinReader(const InputPin& pin)
-		:_pinNumber(pin.get_pin_number()), _previousPinValue(digitalRead(_pinNumber)), _currentPinValue(_previousPinValue), _startTime(0), _endTime(0)
-	{}
-
-	unsigned short ParallelReader::PinReader::get_updated_width() const
-	{
-		return _endTime - _startTime;
-	}
-
-	bool ParallelReader::PinReader::look_for_width_update_tick()
-	{
-		if(_startTime && _endTime)
-			return true;
-
-		_currentPinValue = digitalRead(_pinNumber);
-		if(_currentPinValue && !_previousPinValue)
-			_startTime = micros();
-
-		if(!_currentPinValue && _previousPinValue && _startTime)
-			_endTime = micros();
-
-		_previousPinValue = _currentPinValue;
-		return false;
+		bool pinValue = digitalRead(_pinNumber);
+		bool isReading = _pinToggledHighTimestamp != Time::Microseconds(0);
+		if(!isReading && pinValue)
+			_pinToggledHighTimestamp = Time::Microseconds::since_start();
+		else if(isReading && !pinValue)
+		{
+			_currentWidth = Time::Microseconds::since_start() - _pinToggledHighTimestamp;
+			_pinToggledHighTimestamp = Time::Microseconds(0);
+		}
 	}
 }

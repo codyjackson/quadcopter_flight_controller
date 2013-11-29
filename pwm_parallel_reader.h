@@ -1,76 +1,33 @@
 #ifndef __PARALLEL_READER_H__
 #define __PARALLEL_READER_H__
 
+#include "time.h"
+
 namespace Pwm
 {
+	/*
+		This class makes two important assumptions which could cause problems.
+			1. Frame width doesn't matter. I assume that we will get a steady
+			   stream of information from the receiver and those values will
+			   always be greater than 0.
+			2. The first reading doesn't matter. It's possible that if we turn
+			   this on during a HIGH pwm reading the first reading will be
+			   innacurate because I don't wait for the signal to toggle from
+			   low to high.
+	*/
 	class InputPin
 	{
 	public:
 		InputPin(unsigned char pinNumber);
 		void initialize();
 
-		unsigned short get_current_width() const;
-		unsigned char get_pin_number() const;
+		unsigned long get_current_width() const;
+		void tick();
 
 	private:
-		void update_width(unsigned short width);
-
-		friend class ParallelReader;
-		unsigned char _pinNumber;
-		unsigned short _currentWidth;
-	};
-
-	//I'm making this parallel reader instead of using the pulsein function in order to avoid having 
-	//to pay the 20 ms cost for each channel I want to read. Unfortunately my receiver doesn't support 
-	//PPM or I'd use that. I also don't want to buy a PPM encoder so there's that too.
-	class ParallelReader
-	{
-	public:
-		//I was trying to figure out some other method of another method of performing parallel 
-		//reading but couldn't think of one. There just doesn't seem to be a way of getting around 
-		//tight coupling between the PIN class and the update method if I want to be able to perform
-		//multiple PWM readings at the same time.
-		template<unsigned char NUM_PINS>
-		static void update_pins(InputPin pins[])
-		{
-			PinReader pinReaders[NUM_PINS];
-			for(char i = 0; i < NUM_PINS; ++i)
-				pinReaders[i] = PinReader(pins[i]);
-
-
-			for(;;)
-			{
-				bool completed = true;
-				for(char i = 0; i < NUM_PINS; ++i)
-					completed = completed && pinReaders[i].look_for_width_update_tick();
-				if(completed) 
-					break;
-			}
-
-			for(char i = 0; i < NUM_PINS; ++i)
-				pins[i].update_width(pinReaders[i].get_updated_width());
-		}
-
-	private:
-		//I made this class so that I don't have to keep the additional state in the PIN class.
-		//This should free up memory for other useful computation.
-		class PinReader
-		{
-		public:
-			PinReader();
-			PinReader(const InputPin& pin);
-
-			unsigned short get_updated_width() const;
-			//Returns false if the a new width has been recorded. It will only record a single update.
-			bool look_for_width_update_tick();
-
-		private:
-			unsigned char _pinNumber;
-			bool _previousPinValue;
-			bool _currentPinValue;
-			unsigned long _startTime;
-			unsigned long _endTime;
-		};
+		const unsigned char _pinNumber;
+		Time::Microseconds _pinToggledHighTimestamp;
+		Time::Microseconds _currentWidth;
 	};
 }
 
