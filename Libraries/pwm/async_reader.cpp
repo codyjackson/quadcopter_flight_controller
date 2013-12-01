@@ -1,5 +1,5 @@
-#include "pwm_parallel_reader.h"
 #include <Arduino.h>
+#include "async_reader.h"
 
 namespace Pwm
 {

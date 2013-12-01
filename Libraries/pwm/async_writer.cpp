@@ -1,4 +1,4 @@
-#include "pwm_parallel_writer.h"
+#include "async_writer.h"
 #include <Arduino.h>
 
 namespace Pwm
@@ -23,9 +23,9 @@ namespace Pwm
 		Time::Microseconds currentTime(Time::Microseconds::since_start());
 		if( currentTime >= _nextToggle)
 		{
-			_nextToggle = _currentState ? currentTime + (_frameWidth - _pulseWidth) : currentTime + _pulseWidth;
 			_currentState = !_currentState;
 			digitalWrite(_pinNumber, _currentState);
+			_nextToggle = _currentState ? currentTime + _pulseWidth : currentTime + (_frameWidth - _pulseWidth);
 		}
 	}
 }

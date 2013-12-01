@@ -1,5 +1,5 @@
-#ifndef __PARALLEL_READER_H__
-#define __PARALLEL_READER_H__
+#ifndef __ASYNC_READER_H__
+#define __ASYNC_READER_H__
 
 #include "time.h"
 
