@@ -1,15 +1,12 @@
 #ifndef __PARALLEL_WRITER_H__
 #define __PARALLEL_WRITER_H__
 
-#include "time.h"
-
 namespace Pwm
 {
 	class OutputPin
 	{
 	public:
 		OutputPin(unsigned char pinNumber, const Time::Microseconds& frameWidth);
-		void initialize();
 
 		void set_pulse_width(Time::Microseconds pulseWidth);
 		void tick();

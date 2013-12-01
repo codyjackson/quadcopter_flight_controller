@@ -6,8 +6,6 @@ namespace Pwm
 
 	OutputPin::OutputPin(unsigned char pinNumber, const Time::Microseconds& frameWidth)
 		:_pinNumber(pinNumber), _currentState(false), _frameWidth(frameWidth)
-	{}
-	void OutputPin::initialize()
 	{
 		pinMode(_pinNumber, OUTPUT);
 		digitalWrite(_pinNumber, _currentState);

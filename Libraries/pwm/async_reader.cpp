@@ -5,9 +5,6 @@ namespace Pwm
 {
 	InputPin::InputPin(unsigned char pinNumber)
 		:_pinNumber(pinNumber), _pinToggledHighTimestamp(0), _currentWidth(0)
-	{}
-
-	void InputPin::initialize()
 	{
 		pinMode(_pinNumber, INPUT);
 	}

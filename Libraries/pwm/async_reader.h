@@ -19,7 +19,6 @@ namespace Pwm
 	{
 	public:
 		InputPin(unsigned char pinNumber);
-		void initialize();
 
 		unsigned long get_current_width() const;
 		void tick();
