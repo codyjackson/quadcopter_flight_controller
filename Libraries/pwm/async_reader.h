@@ -1,32 +1,29 @@
 #ifndef __ASYNC_READER_H__
 #define __ASYNC_READER_H__
 
-#include "time.h"
+#include "./../time/time.h"
 
 namespace Pwm
 {
-	/*
-		This class makes two important assumptions which could cause problems.
-			1. Frame width doesn't matter. I assume that we will get a steady
-			   stream of information from the receiver and those values will
-			   always be greater than 0.
-			2. The first reading doesn't matter. It's possible that if we turn
-			   this on during a HIGH pwm reading the first reading will be
-			   innacurate because I don't wait for the signal to toggle from
-			   low to high.
-	*/
 	class InputPin
 	{
 	public:
 		InputPin(unsigned char pinNumber);
+		/*
+			Tick is assumed to be called on a regular interval. If tick is called irregularly than accuracy cannot be certain.
+			The accuracy is determined by the time period between calls. If it takes 10us between calls than the accuracy is +- 10us.
 
-		unsigned long get_current_width() const;
-		void tick();
+			If you can only garuntee the regular interval for enough time to get a single pulse width reading. Next time you come to call tick
+			simply construct a new InputPin and all should be well.
+
+			return: Tick return a time greater than 0us whenever a pulse width is fully read. Otherwise 0us is returned.
+		*/
+		Time::Microseconds tick();
 
 	private:
-		const unsigned char _pinNumber;
+		unsigned char _pinNumber;
+		bool _oldPinValue;
 		Time::Microseconds _pinToggledHighTimestamp;
-		Time::Microseconds _currentWidth;
 	};
 }
 

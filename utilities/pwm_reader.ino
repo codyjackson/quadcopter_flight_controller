@@ -1,4 +1,4 @@
-#include "pwm_parallel_reader.h"
+#include "async_reader.h"
 #include <Arduino.h>
 
 
@@ -15,6 +15,9 @@ void loop()
 {
 	receiver.tick();
 	if(receiver.get_current_width() != cur)
+	{
 		Serial.println(cur = receiver.get_current_width());
+		receiver = Pwm::InputPin(5);
+	}
 }
 

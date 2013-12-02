@@ -1,6 +1,8 @@
 #ifndef __PARALLEL_WRITER_H__
 #define __PARALLEL_WRITER_H__
 
+#include "./../time/time.h"
+
 namespace Pwm
 {
 	class OutputPin

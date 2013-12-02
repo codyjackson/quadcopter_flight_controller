@@ -4,26 +4,24 @@
 namespace Pwm
 {
 	InputPin::InputPin(unsigned char pinNumber)
-		:_pinNumber(pinNumber), _pinToggledHighTimestamp(0), _currentWidth(0)
+		:_pinNumber(pinNumber), _pinToggledHighTimestamp(0)
 	{
 		pinMode(_pinNumber, INPUT);
+		_oldPinValue = digitalRead(_pinNumber);
 	}
 
-	unsigned long InputPin::get_current_width() const
-	{
-		return _currentWidth.raw();
-	}
-
-	void InputPin::tick()
+	Time::Microseconds InputPin::tick()
 	{
 		bool pinValue = digitalRead(_pinNumber);
-		bool isReading = _pinToggledHighTimestamp != Time::Microseconds(0);
-		if(!isReading && pinValue)
-			_pinToggledHighTimestamp = Time::Microseconds::since_start();
-		else if(isReading && !pinValue)
-		{
-			_currentWidth = Time::Microseconds::since_start() - _pinToggledHighTimestamp;
-			_pinToggledHighTimestamp = Time::Microseconds(0);
-		}
+		Time::Microseconds curTime = Time::Microseconds::since_start();
+		
+		bool oldPinValue = _oldPinValue;
+		_oldPinValue = pinValue;
+
+		if(pinValue && !oldPinValue)
+			_pinToggledHighTimestamp = curTime;
+		else if(!pinValue && oldPinValue && (_pinToggledHighTimestamp != Time::Microseconds(0)))
+			return curTime - _pinToggledHighTimestamp;
+		return Time::Microseconds(0);
 	}
 }
