@@ -1,27 +1,19 @@
 #include <Arduino.h>
 #include "async_reader.h"
 
-namespace Pwm
+
+InputPin::InputPin(unsigned char pinNumber)
+	:_pinNumber(pinNumber)
 {
-	InputPin::InputPin(unsigned char pinNumber)
-		:_pinNumber(pinNumber), _pinToggledHighTimestamp(0)
-	{
-		pinMode(_pinNumber, INPUT);
-		_oldPinValue = digitalRead(_pinNumber);
-	}
+	pinMode(_pinNumber, INPUT);
+}
 
-	Time::Microseconds InputPin::tick()
-	{
-		bool pinValue = digitalRead(_pinNumber);
-		Time::Microseconds curTime = Time::Microseconds::since_start();
-		
-		bool oldPinValue = _oldPinValue;
-		_oldPinValue = pinValue;
+bool InputPin::get_signal() const
+{
+	return digitalRead(_pinNumber);
+}
 
-		if(pinValue && !oldPinValue)
-			_pinToggledHighTimestamp = curTime;
-		else if(!pinValue && oldPinValue && (_pinToggledHighTimestamp != Time::Microseconds(0)))
-			return curTime - _pinToggledHighTimestamp;
-		return Time::Microseconds(0);
-	}
+Time::Microseconds InputPin::get_pulse_width() const
+{
+	pulseIn(_pinNumber, HIGH);
 }
