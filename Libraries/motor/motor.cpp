@@ -1,0 +1,19 @@
+#include "motor.h"
+
+#include <Arduino.h>
+
+Motor::Motor(const OutputPin& outputPin, unsigned long trim)
+	:_outputPin(outputPin), _trim(trim), _pulseWidth(0)
+{}
+
+void Motor::adjust_output(float percentage)
+{
+	_pulseWidth = constrain(static_cast<unsigned long>(percentage*1000.0f), 0, 1000) + _trim + 1000;
+}
+
+void Motor::send_signal()
+{
+	_outputPin.turn_on();
+	delayMicroseconds(_pulseWidth);
+	_outputPin.turn_off();
+}

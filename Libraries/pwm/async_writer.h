@@ -3,23 +3,17 @@
 
 #include "./../time/time.h"
 
-namespace Pwm
+
+class OutputPin
 {
-	class OutputPin
-	{
-	public:
-		OutputPin(unsigned char pinNumber, const Time::Microseconds& frameWidth);
+public:
+	OutputPin(unsigned char pinNumber);
 
-		void set_pulse_width(Time::Microseconds pulseWidth);
-		void tick();
+	void turn_on();
+	void turn_off();
 
-	private:
-		unsigned char _pinNumber;
-		bool _currentState;
-		Time::Microseconds _frameWidth;
-		Time::Microseconds _pulseWidth;
-		Time::Microseconds _nextToggle;
-	};
-}
+private:
+	unsigned char _pinNumber;
+};
 
 #endif

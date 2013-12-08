@@ -10,6 +10,8 @@
 #include "i2c.h"
 #include "imu.h"
 #include "vec.h"
+#include "motor.h"
+
 
 class ScopedTimer
 {
@@ -30,6 +32,7 @@ private:
 	unsigned long m_start;
 };
 
+Motor m(OutputPin(8), 180);
 Receiver r;
 Imu imu;
 void setup()
@@ -40,11 +43,9 @@ void setup()
 
 void loop()
 {
-	{
-		ScopedTimer t;
-		r.update();
-	}
-
+	r.update();
 	imu.update();
+	m.adjust_output(0.05);
+	m.send_signal();
 }
 
