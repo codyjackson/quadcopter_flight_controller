@@ -1,22 +1,50 @@
+#include <Arduino.h>
+#include <Wire.h>
+
 #include "time.h"
 #include "async_reader.h"
+#include "async_writer.h"
 #include "receiver.h"
-#include <Arduino.h>
+#include "accelerometer.h"
+#include "gyroscope.h"
+#include "i2c.h"
+#include "imu.h"
+#include "vec.h"
 
+class ScopedTimer
+{
+public:
+	ScopedTimer()
+		:m_start(micros())
+	{}
+
+	~ScopedTimer()
+	{
+		Serial.println(micros()-m_start);
+	}
+
+private:
+	ScopedTimer(const ScopedTimer&);
+	const ScopedTimer& operator =(const ScopedTimer&);
+
+	unsigned long m_start;
+};
 
 Receiver r;
+Imu imu;
 void setup()
 {
 	Serial.begin(9600);
+	imu.initialize();
 }
 
 void loop()
 {
-	r.update();
-	Serial.print(r.get_thrust_percentage());
-	Serial.print(" ");
-	Serial.print(r.get_roll_percentage());
-	Serial.print(" ");
-	Serial.println(r.get_pitch_percentage());
+	{
+		ScopedTimer t;
+		r.update();
+	}
+
+	imu.update();
 }
 

@@ -9,33 +9,33 @@ namespace Time
 	{
 	public:
 		Microseconds();
-		explicit Microseconds(unsigned long ms);
+		explicit Microseconds(long ms);
 		explicit Microseconds(const Milliseconds& us);
 
-		unsigned long raw() const;
+		long raw() const;
 
 		operator Milliseconds() const;
 
 		static Microseconds since_start();
 
 	private:
-		unsigned long _us;
+		long _us;
 	};
 
 	class Milliseconds
 	{
 	public:
 		Milliseconds();
-		explicit Milliseconds(unsigned long ms);
+		explicit Milliseconds(long ms);
 
-		unsigned long raw() const;
+		long raw() const;
 
 		operator Microseconds() const;
 
 		static Milliseconds since_start();
 
 	private:
-		unsigned long _ms;
+		long _ms;
 	};
 
 	bool operator<(const Microseconds& lhs, const Microseconds& rhs);

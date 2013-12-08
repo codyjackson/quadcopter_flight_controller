@@ -9,11 +9,11 @@ namespace Time
 		:_ms(0)
 	{}
 
-	Milliseconds::Milliseconds(unsigned long ms)
+	Milliseconds::Milliseconds(long ms)
 		:_ms(ms)
 	{}
 
-	unsigned long Milliseconds::raw() const
+	long Milliseconds::raw() const
 	{
 		return _ms;
 	}
@@ -35,7 +35,7 @@ namespace Time
 		:_us(0)
 	{}
 
-	Microseconds::Microseconds(unsigned long us)
+	Microseconds::Microseconds(long us)
 		:_us(us)
 	{}
 
@@ -44,7 +44,7 @@ namespace Time
 	{}
 
 
-	unsigned long Microseconds::raw() const
+	long Microseconds::raw() const
 	{
 		return _us;
 	}

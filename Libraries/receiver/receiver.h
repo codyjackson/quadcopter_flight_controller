@@ -1,6 +1,8 @@
 #ifndef __RECEIVER_H__
 #define __RECEIVER_H__
 
+#include "./../pwm/async_reader.h"
+
 class Receiver
 {
 public:
@@ -13,6 +15,10 @@ public:
 	float get_pitch_percentage() const;
 
 private:
+	InputPin _thrustPin;
+	InputPin _rollPin;
+	InputPin _pitchPin;
+
 	float _thrust;
 	float _roll;
 	float _pitch;

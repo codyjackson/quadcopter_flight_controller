@@ -1,20 +1,16 @@
 #include "receiver.h"
-#include "./../pwm/async_reader.h"
 
+#include<Arduino.h>
 
 Receiver::Receiver()
-	:_thrust(0), _roll(0), _pitch(0)
+	:_thrustPin(6), _rollPin(4), _pitchPin(5), _thrust(0), _roll(0), _pitch(0)
 {}
 
 void Receiver::update()
 {
-	InputPin thrustPin(5);
-	InputPin rollPin(2);
-	InputPin pitchPin(1);
-
-	_thrust = static_cast<float>(thrustPin.get_pulse_width().raw()-1100)/800.0f;
-	_roll = static_cast<float>(rollPin.get_pulse_width().raw()-1500)/800.0f;
-	_pitch = static_cast<float>(pitchPin.get_pulse_width().raw()-1500)/800.0f;
+	_thrust = constrain(static_cast<float>(_thrustPin.get_pulse_width().raw()-1150)/800.0f, 0.0f, 0.8f);
+	_roll = constrain(static_cast<float>(_rollPin.get_pulse_width().raw()-1500)/400.0f, -1.0f, 1.0f);
+	_pitch = constrain(static_cast<float>(_pitchPin.get_pulse_width().raw()-1500)/375.0f, -1.0f, 1.0f);
 }
 
 float Receiver::get_thrust_percentage() const
