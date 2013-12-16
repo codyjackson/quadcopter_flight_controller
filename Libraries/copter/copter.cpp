@@ -1,14 +1,27 @@
 #include "copter.h"
 
+
 Copter::Copter()
+:	_thrust(0),
+
+	_rollPi(2, 0.25),
+	_pitchPi(2, 0.25),
+
+	_frontLeftMotor(OutputPin(8), 160), 
+	_frontRightMotor(OutputPin(9), 160), 
+	_backRightMotor(OutputPin(10), 10), 
+	_backLeftMotor(OutputPin(11), 155)
+{}
+
+void Copter::initialize()
 {
-	//TODO
+	_imu.initialize();
 }
 
 void Copter::update()
 {
-	const float rollOut = _rollPid.update();
-	const float pitchOut = _pitchPid.update();
+	const float rollOut = _rollPid.calculate(_imu.get_roll());
+	const float pitchOut = _pitchPid.calculate(_imu.get_pitch());
 
 	_frontLeftMotor.set_thrust_percentage(_thrust - _pitchPid - rollPid);
 	_frontRightMotor.set_thrust_percentage(_thrust - _pitchPid + rollPid);

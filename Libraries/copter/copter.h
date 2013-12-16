@@ -6,6 +6,7 @@ class Copter
 public:
 	Copter();
 
+	void initialize();
 	void update();
 
 	void set_thrust_percentage(float thrust);
@@ -14,8 +15,8 @@ public:
 
 private:
 	float _thrust;
-	Pid _rollPid;
-	Pid _pitchPid;
+	PiController _rollPi;
+	PiController _pitchPi;
 	Imu _imu;
 
 	Motor _frontLeftMotor;
