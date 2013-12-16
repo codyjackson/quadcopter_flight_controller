@@ -22,6 +22,16 @@ private:
 	float _thrust;
 	float _roll;
 	float _pitch;
+
+	enum Channel
+	{
+		THRUST,
+		ROLL,
+		PITCH,
+		COUNT
+	};
+
+	Channel _channel;
 };
 
 #endif
