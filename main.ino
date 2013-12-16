@@ -32,7 +32,11 @@ private:
 	unsigned long m_start;
 };
 
-Motor m(OutputPin(8), 180);
+Motor m1(OutputPin(8), 160);
+Motor m2(OutputPin(9), 160);
+Motor m3(OutputPin(10), 10);
+Motor m4(OutputPin(11), 155);
+
 Receiver r;
 Imu imu;
 void setup()
@@ -45,7 +49,14 @@ void loop()
 {
 	r.update();
 	imu.update();
-	m.adjust_output(0.05);
+	m.adjust_output(r.get_thrust_percentage());
+	m2.adjust_output(r.get_thrust_percentage());
+	m3.adjust_output(r.get_thrust_percentage());
+	m4.adjust_output(r.get_thrust_percentage());
+
 	m.send_signal();
+	m2.send_signal();
+	m3.send_signal();
+	m4.send_signal();
 }
 
