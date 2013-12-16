@@ -79,7 +79,7 @@ const Vec3 Gyroscope::get_raw_angular_velocity() const
 
 	//The gyroscope reports in mili degrees per second. I'm converting to degrees per second.
 	//http://electronics.stackexchange.com/questions/39024/how-do-i-get-gyro-sensor-data-l3g4200d-into-degrees-sec
-	Vec3 v(-y, x, z);
+	Vec3 v(-y, -x, z);
 	v*=0.0175;
 	return v;
 }

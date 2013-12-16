@@ -2,7 +2,8 @@
 
 Imu::Imu()
 	:_timestamp(0)
-{}
+{
+}
 
 void Imu::initialize()
 {
@@ -37,5 +38,5 @@ float Imu::get_roll() const
 
 float Imu::get_pitch() const
 {
-	return _orientationAccumulator.y();
+	return -_orientationAccumulator.y();
 }

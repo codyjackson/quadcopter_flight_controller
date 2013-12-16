@@ -47,7 +47,7 @@ Vec3 Accelerometer::get_raw_acceleration() const
   const short y = (((short)buffer[3]) << 8) | buffer[2];
   const short z = (((short)buffer[5]) << 8) | buffer[4];
   
-  Vec3 accelerations(x, y, z);
+  Vec3 accelerations(-x, y, -z);
   //Converts to Gs. Refer to the manual.
   return accelerations * 0.004;
 }

@@ -32,23 +32,25 @@ private:
 	unsigned long m_start;
 };
 
-Motor m1(OutputPin(8), 160);
-Motor m2(OutputPin(9), 160);
-Motor m3(OutputPin(10), 10);
-Motor m4(OutputPin(11), 155);
 
+//Copter copter;
 Receiver r;
 Imu imu;
 void setup()
 {
 	Serial.begin(9600);
-	imu.initialize();
+	imu.initialize();               
 }
 
 void loop()
 {
-	r.update();
+	//r.update();
 	imu.update();
+	Serial.print(imu.get_roll());
+	Serial.print("  ");
+	Serial.println(imu.get_pitch());
+
+	/*
 	m.adjust_output(r.get_thrust_percentage());
 	m2.adjust_output(r.get_thrust_percentage());
 	m3.adjust_output(r.get_thrust_percentage());
@@ -58,5 +60,6 @@ void loop()
 	m2.send_signal();
 	m3.send_signal();
 	m4.send_signal();
+	*/
 }
 
