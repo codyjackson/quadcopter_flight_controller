@@ -15,5 +15,5 @@ bool InputPin::get_signal() const
 
 Time::Microseconds InputPin::get_pulse_width() const
 {
-	pulseIn(_pinNumber, HIGH);
+	return Time::Microseconds(pulseIn(_pinNumber, HIGH));
 }
