@@ -15,6 +15,10 @@ public:
 	float get_pitch_percentage() const;
 
 private:
+	void update_thrust();
+	void update_roll();
+	void update_pitch();
+
 	InputPin _thrustPin;
 	InputPin _rollPin;
 	InputPin _pitchPin;

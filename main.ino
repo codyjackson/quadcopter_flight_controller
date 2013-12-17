@@ -11,6 +11,10 @@
 #include "imu.h"
 #include "vec.h"
 #include "motor.h"
+#include "copter.h"
+#include "pi_controller.h"
+
+
 
 
 class ScopedTimer
@@ -33,33 +37,24 @@ private:
 };
 
 
-//Copter copter;
-Receiver r;
-Imu imu;
+Copter copter;
+Receiver receiver;
 void setup()
 {
 	Serial.begin(9600);
-	imu.initialize();               
+	copter.initialize();               
 }
 
 void loop()
 {
-	//r.update();
-	imu.update();
-	Serial.print(imu.get_roll());
-	Serial.print("  ");
-	Serial.println(imu.get_pitch());
-
-	/*
-	m.adjust_output(r.get_thrust_percentage());
-	m2.adjust_output(r.get_thrust_percentage());
-	m3.adjust_output(r.get_thrust_percentage());
-	m4.adjust_output(r.get_thrust_percentage());
-
-	m.send_signal();
-	m2.send_signal();
-	m3.send_signal();
-	m4.send_signal();
-	*/
+	receiver.update();
+	float rollDegrees = receiver.get_roll_percentage()*45.0f;
+	float pitchDegrees = -receiver.get_pitch_percentage()*45.0f;
+	copter.set_thrust_percentage(receiver.get_thrust_percentage());
+	copter.set_target_roll(rollDegrees);
+	copter.set_target_pitch(pitchDegrees);
+	Serial.print(rollDegrees);
+	Serial.print(" ");
+	Serial.println(pitchDegrees);
 }
 
