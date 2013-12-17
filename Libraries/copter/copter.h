@@ -1,6 +1,10 @@
 #ifndef __COPTER_H__
 #define __COPTER_H__
 
+#include "./../imu/imu.h"
+#include "./../motor/motor.h"
+#include "./../pi_controller/pi_controller.h"
+
 class Copter
 {
 public:

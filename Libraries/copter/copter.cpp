@@ -20,14 +20,14 @@ void Copter::initialize()
 
 void Copter::update()
 {
-	const float rollOut = _rollPid.calculate(_imu.get_roll());
-	const float pitchOut = _pitchPid.calculate(_imu.get_pitch());
+	const float rollOut = _rollPi.calculate(_imu.get_roll());
+	const float pitchOut = _pitchPi.calculate(_imu.get_pitch());
 
-	_frontLeftMotor.set_thrust_percentage(_thrust - _pitchPid - rollPid);
-	_frontRightMotor.set_thrust_percentage(_thrust - _pitchPid + rollPid);
+	_frontLeftMotor.adjust_output(_thrust - pitchOut - rollOut);
+	_frontRightMotor.adjust_output(_thrust - pitchOut + rollOut);
 
-	_backLeftMotor.set_thrust_percentage(_thrust + _pitchPid - rollPid);
-	_backRightMotor.set_thrust_percentage(_thrust + _pitchPid + rollPid);
+	_backLeftMotor.adjust_output(_thrust + pitchOut - rollOut);
+	_backRightMotor.adjust_output(_thrust + pitchOut + rollOut);
 
 }
 
@@ -38,10 +38,10 @@ void Copter::set_thrust_percentage(float thrust)
 
 void Copter::set_target_roll(float roll)
 {
-	_rollPid.set_target(roll);
+	_rollPi.set_target(roll);
 }
 
 void Copter::set_target_pitch(float pitch)
 {
-	_pitchPid.set_target(pitch);
+	_pitchPi.set_target(pitch);
 }

@@ -19,7 +19,7 @@ float PiController::calculate(float actual)
 	}
 
 	float dError = _target - actual;
-	float dt = static_cast<float>(stamp - _lastCalculation)/1000000.0f;
+	float dt = static_cast<float>((stamp - _lastCalculation).raw())/1000000.0f;
 	_accumulatedError += dError * dt;
 
 	_lastCalculation = stamp;

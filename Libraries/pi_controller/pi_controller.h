@@ -8,7 +8,7 @@ class PiController
 public:
 	PiController(float kp, float ki);
 
-	float set_target(float target);
+	void set_target(float target);
 	float calculate(float actual);
 	void reset();
 
