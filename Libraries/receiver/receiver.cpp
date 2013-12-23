@@ -11,65 +11,94 @@ namespace
 }
 
 Receiver::Receiver()
-	:_thrustPin(6), _rollPin(4), _pitchPin(5), _thrust(0), _roll(0), _pitch(0), _channel(THRUST)
+	:_rightJoyVerticalPin(5), _rightJoyHorizontalPin(4), _leftJoyVerticalPin(6), _rightJoyVertical(0), _leftTogglePin(7), _rightJoyHorizontal(0), _leftJoyVertical(0), _leftToggle(false), _channel(RIGHT_JOY_VERTICAL)
 {}
 
 void Receiver::update()
 {
-	if(_channel == THRUST)
-		update_thrust();
-	else if(_channel == ROLL)
-		update_roll();
-	else
-		update_pitch();
+	if(_channel == RIGHT_JOY_VERTICAL)
+		update_right_joy_vertical();
+	else if(_channel == RIGHT_JOY_HORIZONTAL)
+		update_right_joy_horizontal();
+	else if(_channel == LEFT_JOY_VERTICAL)
+		update_left_joy_vertical();
+	else if(_channel == LEFT_TOGGLE)
+		update_left_toggle();
 
 	_channel = static_cast<Channel>((_channel+1)%COUNT);
 }
 
-float Receiver::get_thrust_percentage() const
+float Receiver::get_left_joy_vertical_percentage() const
 {
-	return _thrust;
+	return _leftJoyVertical;
 }
 
-float Receiver::get_roll_percentage() const
+float Receiver::get_right_joy_vertical_percentage() const
 {
-	return _roll;
+	return _rightJoyVertical;
 }
 
-float Receiver::get_pitch_percentage() const
+float Receiver::get_right_joy_horizontal_percentage() const
 {
-	return _pitch;
+	return _rightJoyHorizontal;
 }
 
-void Receiver::update_thrust()
+bool Receiver::is_in_configuration_mode() const
 {
-	if(const long value = _thrustPin.get_pulse_width().raw())
+	return _leftToggle;
+}
+
+Receiver::PiTarget Receiver::get_pi_target() const
+{
+	if(_rightJoyVertical > 0.4f)
+		return PROPORTIONAL;
+	if(_rightJoyHorizontal > 0.4f)
+		return INTEGRAL;
+	return NONE;
+}
+
+float Receiver::get_pi_constant() const
+{
+	return get_left_joy_vertical_percentage()*8.0f;
+}
+
+void Receiver::update_right_joy_vertical()
+{
+	if(const long value = _rightJoyVerticalPin.get_pulse_width().raw())
 	{
-		const float thrustRadioRange = 800.0f;
-		const long thrustRadioTrim = 1160;
-		const float candidateThrustValue = constrain(static_cast<float>(value-thrustRadioTrim)/thrustRadioRange, 0.0f, 0.8f);
-		_thrust = cancel_noise(_thrust, candidateThrustValue);
+		const float range = 375.0f;
+		const long centerValue = 1485;
+		const float candidateValue = constrain(static_cast<float>(value-centerValue)/range, -1.0f, 1.0f);
+		_rightJoyVertical = cancel_noise(_rightJoyVertical, candidateValue);
 	}
 }
 
-void Receiver::update_roll()
+
+void Receiver::update_right_joy_horizontal()
 {
-	if(const long value = _rollPin.get_pulse_width().raw())
+	if(const long value = _rightJoyHorizontalPin.get_pulse_width().raw())
 	{
-		const float rollRadioRange = 400.0f;
-		const long rollRadioCenter = 1500;
-		const float candidateRollValue = constrain(static_cast<float>(value-rollRadioCenter)/rollRadioRange, -1.0f, 1.0f);
-		_roll = cancel_noise(_roll, candidateRollValue);
+		const float range = 400.0f;
+		const long centerValue = 1500;
+		const float candidateValue = constrain(static_cast<float>(value-centerValue)/range, -1.0f, 1.0f);
+		_rightJoyHorizontal = cancel_noise(_rightJoyHorizontal, candidateValue);
 	}
 }
 
-void Receiver::update_pitch()
+void Receiver::update_left_joy_vertical()
 {
-	if(const long value = _pitchPin.get_pulse_width().raw())
+	if(const long value = _leftJoyVerticalPin.get_pulse_width().raw())
 	{
-		const float pitchRadioRange = 375.0f;
-		const long pitchRadioCenter = 1485;
-		const float candidatePitchValue = constrain(static_cast<float>(value-pitchRadioCenter)/pitchRadioRange, -1.0f, 1.0f);
-		_pitch = cancel_noise(_pitch, candidatePitchValue);
+		const float range = 800.0f;
+		const long trim = 1160;
+		const float candidateValue = constrain(static_cast<float>(value-trim)/range, 0.0f, 0.8f);
+		_leftJoyVertical = cancel_noise(_leftJoyVertical, candidateValue);
 	}
+}
+
+
+void Receiver::update_left_toggle()
+{
+	if(const long value = _leftTogglePin.get_pulse_width().raw())
+		_leftToggle = value < 1000;
 }
