@@ -13,8 +13,8 @@ public:
 	void reset();
 
 private:
-	const float _kp;
-	const float _ki;
+	float _kp;
+	float _ki;
 	float _accumulatedError;
 	float _target;
 	Time::Microseconds _lastCalculation;

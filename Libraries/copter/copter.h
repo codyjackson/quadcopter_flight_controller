@@ -17,6 +17,11 @@ public:
 	void set_target_roll(float roll);
 	void set_target_pitch(float pitch);
 
+	void update_pi_constants(float p, float i);
+
+	void turn_on_stabalization();
+	void turn_off_stabalization();
+
 private:
 	float _thrust;
 	PiController _rollPi;

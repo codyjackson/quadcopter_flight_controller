@@ -30,6 +30,8 @@ void* endConfigurationTick()
 {
 	storageWrite<float>(PROPORTIONAL_ADDRESS, proportionalConstant);
 	storageWrite<float>(INTEGRAL_ADDRESS, integralConstant);
+	copter.update_pi_constants(proportionalConstant, integralConstant);
+
 	return reinterpret_cast<void*>(copterTick);
 }
 
@@ -43,10 +45,6 @@ void* configurationTick()
 		proportionalConstant = receiver.get_pi_constant();
 	else if(target == Receiver::INTEGRAL)
 		integralConstant = receiver.get_pi_constant();
-
-	Serial.print(proportionalConstant);
-	Serial.print(" ");
-	Serial.println(integralConstant);
 
 	return reinterpret_cast<void*>(configurationTick);
 }
@@ -69,11 +67,14 @@ void* copterTick()
 void* (*currentTick)() = reinterpret_cast<void*(*)()>(copterTick);
 void setup()
 {
+	//Delayed copter initialization by 4 seconds so that the IMU averaging takes place 
+	//after the copter is on the ground stable since I don't have an on/off switch.
+	delay(4000);
+	copter.initialize(); 
+
 	proportionalConstant = storageRead<float>(PROPORTIONAL_ADDRESS);
 	integralConstant = storageRead<float>(INTEGRAL_ADDRESS);
-
-	Serial.begin(9600);
-	copter.initialize();               
+	copter.update_pi_constants(proportionalConstant, integralConstant);
 }
 
 void loop()

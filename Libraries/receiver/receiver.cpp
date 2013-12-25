@@ -59,7 +59,7 @@ Receiver::PiTarget Receiver::get_pi_target() const
 
 float Receiver::get_pi_constant() const
 {
-	return get_left_joy_vertical_percentage()*8.0f;
+	return get_left_joy_vertical_percentage()*1.5f;
 }
 
 void Receiver::update_right_joy_vertical()
