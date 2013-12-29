@@ -11,7 +11,13 @@ namespace
 }
 
 Receiver::Receiver()
-	:_rightJoyVerticalPin(5), _rightJoyHorizontalPin(4), _leftJoyVerticalPin(6), _rightJoyVertical(0), _leftTogglePin(7), _rightJoyHorizontal(0), _leftJoyVertical(0), _leftToggle(false), _channel(RIGHT_JOY_VERTICAL)
+	:_rightJoyVerticalPin(10), 
+	_rightJoyHorizontalPin(9), 
+	_leftJoyVerticalPin(12), 
+	_rightJoyVertical(0), 
+	_leftTogglePin(11), 
+	_rightJoyHorizontal(0), 
+	_leftJoyVertical(0), _leftToggle(false), _channel(RIGHT_JOY_VERTICAL)
 {}
 
 void Receiver::update()
