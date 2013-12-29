@@ -56,7 +56,16 @@ void* copterTick()
 
 	float rollDegrees = receiver.get_right_joy_horizontal_percentage()*45.0f;
 	float pitchDegrees = -receiver.get_right_joy_vertical_percentage()*45.0f;
-	copter.set_thrust_percentage(receiver.get_left_joy_vertical_percentage());
+	float thrustPercentage = receiver.get_left_joy_vertical_percentage();
+
+	//If thrust is zero I turn stabalization off to prevent the copter from using the
+	//motors to reorient it'self when the copter shouldn't be moving.
+	if(abs(thrustPercentage) < 0.0001f)
+		copter.turn_off_stabalization();
+	else
+		copter.turn_on_stabalization();
+
+	copter.set_thrust_percentage(thrustPercentage);
 	copter.set_target_roll(rollDegrees);
 	copter.set_target_pitch(pitchDegrees);
 	copter.update();
