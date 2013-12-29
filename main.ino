@@ -79,7 +79,6 @@ void setup()
 	//Delayed copter initialization by 4 seconds so that the IMU averaging takes place 
 	//after the copter is on the ground stable since I don't have an on/off switch.
 	delay(4000);
-	Serial.begin(9600);
 	copter.initialize(); 
 
 	proportionalConstant = storageRead<float>(PROPORTIONAL_ADDRESS);
@@ -89,7 +88,7 @@ void setup()
 
 void loop()
 {
-	//receiver.update();
+	receiver.update();
 	currentTick = reinterpret_cast<void*(*)()>(currentTick());
 }
 
