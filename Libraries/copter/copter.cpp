@@ -7,10 +7,10 @@ Copter::Copter()
 	_rollPi(0, 0),
 	_pitchPi(0, 0),
 
-	_frontLeftMotor(OutputPin(5), 160), 
-	_frontRightMotor(OutputPin(6), 160), 
-	_backRightMotor(OutputPin(7), 10), 
-	_backLeftMotor(OutputPin(8), 155)
+	_frontLeftMotor(OutputPin(5), 0), 
+	_frontRightMotor(OutputPin(6), 0), 
+	_backRightMotor(OutputPin(7), 0), 
+	_backLeftMotor(OutputPin(8), 0)
 {}
 
 void Copter::initialize()
