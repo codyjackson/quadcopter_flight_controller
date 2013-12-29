@@ -55,7 +55,7 @@ void* copterTick()
 		return reinterpret_cast<void*>(configurationTick);
 
 	float rollDegrees = receiver.get_right_joy_horizontal_percentage()*45.0f;
-	float pitchDegrees = -receiver.get_right_joy_vertical_percentage()*45.0f;
+	float pitchDegrees = receiver.get_right_joy_vertical_percentage()*45.0f;
 	float thrustPercentage = receiver.get_left_joy_vertical_percentage();
 
 	//If thrust is zero I turn stabalization off to prevent the copter from using the
