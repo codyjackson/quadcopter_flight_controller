@@ -32,5 +32,7 @@ private:
 	Motor _frontRightMotor;
 	Motor _backLeftMotor;
 	Motor _backRightMotor;
+
+	bool _stabalizing;
 };
 #endif
