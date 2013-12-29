@@ -14,6 +14,12 @@ void Motor::adjust_output(float percentage)
 void Motor::send_signal()
 {
 	_outputPin.turn_on();
-	delayMicroseconds(_pulseWidth);
+
+	//I'm adding this condition because if the ESC doesn't receive an initial 1000 _pulseWidth for lowest
+	//throttle it won't start.
+	if(1000+_trim == _pulseWidth)
+		delayMicroseconds(1000);
+	else
+		delayMicroseconds(_pulseWidth);
 	_outputPin.turn_off();
 }
