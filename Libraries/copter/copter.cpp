@@ -24,11 +24,11 @@ void Copter::update()
 	const float rollOut = _stabalizing ? _rollPi.calculate(_imu.get_roll())/360.0f : 0.0f;
 	const float pitchOut = _stabalizing ? _pitchPi.calculate(_imu.get_pitch())/360.0f : 0.0f;
 
-	_frontLeftMotor.adjust_output(_thrust + pitchOut + rollOut);
-	_frontRightMotor.adjust_output(_thrust + pitchOut - rollOut);
+	_frontLeftMotor.adjust_output(_thrust - pitchOut + rollOut);
+	_frontRightMotor.adjust_output(_thrust - pitchOut - rollOut);
 
-	_backLeftMotor.adjust_output(_thrust - pitchOut + rollOut);
-	_backRightMotor.adjust_output(_thrust - pitchOut - rollOut);
+	_backLeftMotor.adjust_output(_thrust + pitchOut + rollOut);
+	_backRightMotor.adjust_output(_thrust + pitchOut - rollOut);
 
 	_frontLeftMotor.send_signal();
 	_frontRightMotor.send_signal();
