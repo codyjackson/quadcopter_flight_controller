@@ -23,6 +23,8 @@ float proportionalConstant = 0;
 float integralConstant = 0;
 const int PROPORTIONAL_ADDRESS = 0;
 const int INTEGRAL_ADDRESS = PROPORTIONAL_ADDRESS + sizeof(proportionalConstant);
+const float MAX_TARGET_TILT_DEGREES = 20.0f;
+const float MAX_COPTER_TILT_DEGREES = MAX_TARGET_TILT_DEGREES + 20.0f;
 
 void* copterTick();
 
@@ -49,14 +51,28 @@ void* configurationTick()
 	return reinterpret_cast<void*>(configurationTick);
 }
 
+void* killedTick()
+{
+	copter.turn_off_stabalization();
+	copter.set_thrust_percentage(0.0f);
+	copter.update();
+
+	return reinterpret_cast<void*>(killedTick);
+}
+
 void* copterTick()
 {
 	if(receiver.is_in_configuration_mode())
 		return reinterpret_cast<void*>(configurationTick);
 
-	float rollDegrees = receiver.get_right_joy_horizontal_percentage()*45.0f;
-	float pitchDegrees = receiver.get_right_joy_vertical_percentage()*45.0f;
+	float rollDegrees = receiver.get_right_joy_horizontal_percentage()*MAX_TARGET_TILT_DEGREES;
+	float pitchDegrees = receiver.get_right_joy_vertical_percentage()*MAX_TARGET_TILT_DEGREES;
 	float thrustPercentage = receiver.get_left_joy_vertical_percentage();
+
+	//If we ever exceed max tilt it's time to kill the copter.
+	//This should hopefully minimize damage in a crash.
+	if((abs(rollDegrees) > MAX_COPTER_TILT_DEGREES) || (abs(pitchDegrees) > MAX_COPTER_TILT_DEGREES)
+		return reinterpret_cast<void*>(killedTick);
 
 	//If thrust is zero I turn stabalization off to prevent the copter from using the
 	//motors to reorient it'self when the copter shouldn't be moving.
