@@ -10,6 +10,9 @@ class Copter
 public:
 	Copter();
 
+	float get_roll() const;
+	float get_pitch() const;
+
 	void initialize();
 	void update();
 

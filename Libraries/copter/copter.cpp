@@ -13,6 +13,16 @@ Copter::Copter()
 	_backLeftMotor(OutputPin(8), 0)
 {}
 
+float Copter::get_roll() const
+{
+	return _imu.get_roll();
+}
+
+float Copter::get_pitch() const
+{
+	return _imu.get_pitch();
+}
+
 void Copter::initialize()
 {
 	_imu.initialize();

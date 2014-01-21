@@ -71,7 +71,7 @@ void* copterTick()
 
 	//If we ever exceed max tilt it's time to kill the copter.
 	//This should hopefully minimize damage in a crash.
-	if((abs(rollDegrees) > MAX_COPTER_TILT_DEGREES) || (abs(pitchDegrees) > MAX_COPTER_TILT_DEGREES)
+	if((abs(copter.get_roll()) > MAX_COPTER_TILT_DEGREES) || (abs(copter.get_pitch()) > MAX_COPTER_TILT_DEGREES))
 		return reinterpret_cast<void*>(killedTick);
 
 	//If thrust is zero I turn stabalization off to prevent the copter from using the
