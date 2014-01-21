@@ -8,6 +8,7 @@ Motor::Motor(const OutputPin& outputPin, unsigned long trim)
 
 void Motor::adjust_output(float percentage)
 {
+	percentage = percentage < 0.02f ? 0.0f : percentage;
 	_pulseWidth = constrain(static_cast<unsigned long>(percentage*1000.0f), 0, 1000) + _trim + 1000;
 }
 
