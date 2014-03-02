@@ -66,7 +66,7 @@ void* copterTick()
 		return reinterpret_cast<void*>(configurationTick);
 
 	float rollDegrees = receiver.get_right_joy_horizontal_percentage()*MAX_TARGET_TILT_DEGREES;
-	float pitchDegrees = receiver.get_right_joy_vertical_percentage()*MAX_TARGET_TILT_DEGREES;
+	float pitchDegrees = -receiver.get_right_joy_vertical_percentage()*MAX_TARGET_TILT_DEGREES;
 	float thrustPercentage = receiver.get_left_joy_vertical_percentage();
 
 	//If we ever exceed max tilt it's time to kill the copter.
