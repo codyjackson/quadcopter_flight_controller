@@ -73,6 +73,7 @@ void Copter::turn_on_stabalization()
 		return;
 
 	_pitchPi.reset();
+	_rollPi.reset();
 	_stabalizing = true;
 }
 	
