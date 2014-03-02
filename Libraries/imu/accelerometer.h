@@ -15,6 +15,7 @@ class Accelerometer
     
   private:
   	Vec3 _offset;
+  	mutable Vec3 _lastSaneAngles;
     Vec3 get_raw_acceleration() const;
   	Vec3 get_average_acceleration(int numOfSamples) const;
 };

@@ -28,13 +28,19 @@ void Accelerometer::initialize()
 
 Vec3 Accelerometer::get_angles() const
 {
-  Vec3 acceleration = get_raw_acceleration() + _offset;
+  const Vec3 acceleration = get_raw_acceleration() + _offset;
+  const float magnitude = acceleration.magnitude();
+
+  //We only consider angles sane if the accelerations they're derived from
+  //are within 0.5 and 2.0 Gs.
+  if(magnitude < 0.5f || magnitude > 2.0f)
+    return _lastSaneAngles;
 
   const float radiansToDegrees = 57.2957795;
   const float xangle = -atan2(acceleration.x(),acceleration.z())*radiansToDegrees;
   const float yangle = -atan2(acceleration.y(),acceleration.z())*radiansToDegrees;
 
-  return Vec3(xangle, yangle, 0);
+  return _lastSaneAngles = Vec3(xangle, yangle, 0);
 }
 
 Vec3 Accelerometer::get_raw_acceleration() const

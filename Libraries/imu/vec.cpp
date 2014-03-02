@@ -1,5 +1,7 @@
 #include "vec.h"
 
+#include <math.h>
+
 Vec3::Vec3()
   :_x(0.0f), _y(0.0f), _z(0.0f)
 {}
@@ -51,6 +53,16 @@ const float Vec3::y() const
 const float Vec3::z() const
 {
   return _z;
+}
+
+const float Vec3::magnitude() const
+{
+  return sqrt(dot(*this));
+}
+
+const float Vec3::dot(const Vec3& rhs) const
+{
+  return _x*rhs._x + _y*rhs._y + _z*rhs._z;
 }
 
 const Vec3& operator*(const float scalar, const Vec3& vec)

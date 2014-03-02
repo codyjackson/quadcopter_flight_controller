@@ -10,6 +10,10 @@ class Vec3
     const float y() const;
     const float z() const;
     
+    const float magnitude() const;
+
+    const float dot(const Vec3& rhs) const;
+
     const Vec3 operator*(const float scalar) const;
     const Vec3& operator*=(const float scalar);
 
