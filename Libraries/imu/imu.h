@@ -19,7 +19,7 @@ private:
 	Vec3 get_orientation();
 
 	unsigned long _timestamp;
-	Vec3 _orientationAccumulator;
+	Vec3 _orientation;
 
 	Accelerometer _accelerometer;
 	Gyroscope _gyroscope;
