@@ -30,6 +30,8 @@ void* copterTick();
 
 void* endConfigurationTick()
 {
+	copter.update();
+
 	storageWrite<float>(PROPORTIONAL_ADDRESS, proportionalConstant);
 	storageWrite<float>(INTEGRAL_ADDRESS, integralConstant);
 	copter.update_pi_constants(proportionalConstant, integralConstant);
@@ -39,6 +41,7 @@ void* endConfigurationTick()
 
 void* configurationTick()
 {
+	copter.update();
 	if(!receiver.is_in_configuration_mode())
 		return reinterpret_cast<void*>(endConfigurationTick);
 
@@ -95,7 +98,7 @@ void setup()
 	//Delayed copter initialization by 4 seconds so that the IMU averaging takes place 
 	//after the copter is on the ground stable since I don't have an on/off switch.
 	delay(4000);
-	copter.initialize(); 
+	copter.initialize();
 
 	proportionalConstant = storageRead<float>(PROPORTIONAL_ADDRESS);
 	integralConstant = storageRead<float>(INTEGRAL_ADDRESS);
